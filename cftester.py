@@ -28,6 +28,7 @@ for l in soup.findAll('div', attrs={'class': re.compile("input$")}):
 for l in soup.findAll('div', attrs={'class': re.compile("output$")}):
 	outs.append(l.findChildren('pre')[0].text)
 
+
 res = subprocess.Popen(["g++",sys.argv[1]+".cpp"],stdout=subprocess.PIPE)
 res.communicate()
 j = 0
