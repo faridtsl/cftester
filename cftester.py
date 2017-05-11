@@ -24,10 +24,19 @@ html = response.read()
 outs = []
 ins = []
 for l in soup.findAll('div', attrs={'class': re.compile("input$")}):
-	ins.append(l.findChildren('pre')[0].text)
+	txt = ''
+	for c in l.findChildren('pre')[0].contents:
+		if str(c) == '<br />':
+			c = "\n"
+		txt = txt + str(c)
+	ins.append(txt)
 for l in soup.findAll('div', attrs={'class': re.compile("output$")}):
-	outs.append(l.findChildren('pre')[0].text)
-
+	txt = ''
+	for c in l.findChildren('pre')[0].contents:
+		if str(c) == '<br />':
+			c = "\n"
+		txt = txt + str(c)
+	outs.append(txt[:-1])
 
 res = subprocess.Popen(["g++",sys.argv[1]+".cpp"],stdout=subprocess.PIPE)
 res.communicate()
