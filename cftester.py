@@ -6,14 +6,14 @@ import subprocess
 import sys
 
 class bcolors:
-	BOLD = '\033[1m'
+	UNDERLINE = '\033[4m'
+	BOLD = '\033[1m'+UNDERLINE
 	HEADER = '\033[95m'
 	OKBLUE = '\033[94m'
 	OKGREEN = '\033[92m'+BOLD
-	WARNING = '\033[93m'
+	WARNING = '\033[93m'+BOLD
 	FAIL = '\033[91m'+BOLD
 	ENDC = '\033[0m'
-	UNDERLINE = '\033[4m'
 
 with open('contest', 'r') as f:
     contest = f.readline()
@@ -41,13 +41,20 @@ for l in soup.findAll('div', attrs={'class': re.compile("output$")}):
 res = subprocess.Popen(["g++",sys.argv[1]+".cpp"],stdout=subprocess.PIPE)
 res.communicate()
 j = 0
-print("OUT\t\t\t\tEXPECTED\t\t\tVERDICT")
 for i in ins :
+	print(bcolors.WARNING+"Test Case " + str(j+1)+bcolors.ENDC)
 	p = subprocess.Popen(["./a.out"],stdout=subprocess.PIPE,stdin=subprocess.PIPE)
 	res = p.communicate(i)[0]
 	if outs[j] == res[:-1] :
 		jd = bcolors.OKGREEN + "YES" + bcolors.ENDC
 	else:
 		jd = bcolors.FAIL + "NO" + bcolors.ENDC
-	print(res[:-1]+"\t\t\t\t"+outs[j]+"\t\t\t\t"+jd)
+	print(bcolors.BOLD+"Input :"+bcolors.ENDC)
+	print(i)
+	print(bcolors.BOLD+"Output :"+bcolors.ENDC)
+	print(res)
+	print(bcolors.BOLD+"Expected Output :"+bcolors.ENDC)
+	print(outs[j] + "\n")
+	print("Verdict : " + jd)
+	print("\n==========================================\n")
 	j+=1
